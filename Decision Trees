@@ -1,0 +1,35 @@
+from sklearn.datasets import load_iris
+from sklearn.tree import export_graphviz
+from graphviz import Graph, Digraph
+
+# Start by designing a classifier
+from sklearn.tree import DecisionTreeClassifier
+
+iris = load_iris()
+X = iris.data[:, 2:]  # petal length, petal width
+y = iris.target
+
+tree_clf = DecisionTreeClassifier(max_depth=2)
+tree_clf.fit(X, y)
+
+export_graphviz(
+    tree_clf,
+    out_file="iris_tree.gv",
+    feature_names=iris.feature_names[2:],
+    rounded=True,
+    filled=True
+)
+# Im having trouble getting this to a png file
+
+# Make predictions
+print("Different Probabilities: ", tree_clf.predict_proba([[5, 1.5]]))
+print("Prediction: ", tree_clf.predict([[10, 1.5]]))  # 1 represents Iris-Virginica
+
+
+# Now lets design a regression model
+# Now, instead of predicting a class, we predict a value corresponding to a continuous set of labels
+from sklearn.tree import DecisionTreeRegressor
+
+tree_reg = DecisionTreeRegressor(max_depth=2)
+tree_reg.fit(X, y)
+print("Regression prediction: ", tree_reg.predict([[5, 1.5]]))
